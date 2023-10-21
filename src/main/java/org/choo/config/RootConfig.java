@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan(basePackages = {"org.choo.service"})
 @MapperScan(basePackages = {"org.choo.mapper"})
 public class RootConfig {
 

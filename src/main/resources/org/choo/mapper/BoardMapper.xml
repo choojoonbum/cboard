@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.choo.mapper.BoardMapper">
+    <select id="getList" resultType="org.choo.domain.BoardVO">
+	<![CDATA[
+        select * from c_board where bno > 0
+        ]]>
+	</select>
+
+    <select id="read" resultType="org.choo.domain.BoardVO">
+        select * from c_board where bno = #{bno}
+    </select>
+
+    <insert id="insertSelectKey" parameterType="org.choo.domain.BoardVO" useGeneratedKeys="true" keyProperty="bno">
+        insert into c_board (title, content, writer) values (#{title}, #{content}, #{writer})
+    </insert>
+
+    <update id="update">
+        update c_board set
+                         title = #{title},
+                         content = #{content},
+                         writer = #{writer},
+                         moddate = current_timestamp()
+        where bno = #{bno}
+    </update>
+
+    <delete id="delete">
+        delete from c_board where bno = #{bno}
+    </delete>
+</mapper>
