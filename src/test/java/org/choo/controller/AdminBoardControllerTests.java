@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ContextConfiguration(classes = {RootConfig.class, ServletConfig.class})
 @Log4j
-public class BoardControllerTests {
+public class AdminBoardControllerTests {
     @Autowired
     private WebApplicationContext ctx;
     private MockMvc mockMvc;

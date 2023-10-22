@@ -12,9 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Log4j
-@RequestMapping("/board/*")
+@RequestMapping("/admin/board")
 @AllArgsConstructor
-public class BoardController {
+public class AdminBoardController {
     private BoardService service;
 
     @GetMapping("/list")
@@ -23,23 +23,32 @@ public class BoardController {
         model.addAttribute("list", service.getList());
     }
 
+    @GetMapping("/register")
+    public void register(@ModelAttribute("formData") BoardVO board) {
+        log.info("register");
+    }
+
     @PostMapping("/register")
     public String register(BoardVO board, RedirectAttributes rttr) {
         log.info("register: " + board);
         service.register(board);
         rttr.addFlashAttribute("result", board.getBno());
-        return "redirect:/board/list";
+        return "redirect:/admin/board/list";
+    }
+
+    @GetMapping({"/get", "/modify"})
+    public void get(@RequestParam("bno") Long bno, @ModelAttribute("criteria") Criteria criteria, Model model) {
+        log.info("/get or modify");
+        model.addAttribute("board", service.get(bno));
     }
 
     @PostMapping("/modify")
     public String modify(BoardVO board, RedirectAttributes rttr) {
         log.info("modify: " + board);
-
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
-
-        return "redirect:/board/list";
+        return "redirect:/admin/board/list";
     }
 
     @PostMapping("/remove")
@@ -50,6 +59,6 @@ public class BoardController {
             rttr.addFlashAttribute("result", "success");
         }
 
-        return "redirect:/board/list";
+        return "redirect:/admin/board/list";
     }
 }
