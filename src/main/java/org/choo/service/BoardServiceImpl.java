@@ -42,13 +42,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardVO> getList() {
+    public List<BoardVO> getList(Criteria criteria) {
         log.info("getList......");
-        return mapper.getList();
+        criteria.setLimit((criteria.getPageNum() - 1) * criteria.getAmount());
+        return mapper.getListWithPaging(criteria);
     }
 
     @Override
     public int getTotal(Criteria criteria) {
-        return 0;
+        return mapper.getTotalCount(criteria);
     }
 }

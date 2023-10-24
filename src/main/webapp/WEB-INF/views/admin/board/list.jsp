@@ -20,7 +20,10 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <form id="actionForm" action="list" method="get">
-
+                    <input type="hidden" name="pageNum" value="${pageMaker.criteria.pageNum}">
+                    <input type="hidden" name="amount" value="${pageMaker.criteria.amount}">
+                    <input type="hidden" name="type" value="${pageMaker.criteria.type}">
+                    <input type="hidden" name="keyword" value="${pageMaker.criteria.keyword}">
                 </form>
                 <div class="row">
                     <div class="col-sm-6">
@@ -62,6 +65,31 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <div class="text-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <c:if test="${pageMaker.prev}">
+                                <li>
+                                    <a href="${pageMaker.startPage - 1}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+
+                            <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                                <li class="${pageMaker.criteria.pageNum == num ? "active":""}"><a href="${num}">${num}</a></li>
+                            </c:forEach>
+
+                            <c:if test="${pageMaker.next}">
+                                <li>
+                                    <a href="${pageMaker.endPage + 1}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                        </ul>
+                    </nav>
+                </div>
                 <button id='regBtn' type="button" class="btn btn-default pull-right">Register</button>
                 <!-- /.table-responsive -->
             </div>

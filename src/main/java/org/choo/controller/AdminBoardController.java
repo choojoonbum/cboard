@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.choo.domain.BoardVO;
 import org.choo.domain.Criteria;
+import org.choo.domain.PageDTO;
 import org.choo.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +19,13 @@ public class AdminBoardController {
     private BoardService service;
 
     @GetMapping("/list")
-    public void list(Model model) {
+    public void list(Criteria criteria, Model model) {
         log.info("list");
-        model.addAttribute("list", service.getList());
+        log.info("criteria: " + criteria);
+        int total = service.getTotal(criteria);
+        log.info("total: " + total);
+        model.addAttribute("list", service.getList(criteria));
+        model.addAttribute("pageMaker", new PageDTO(criteria, total));
     }
 
     @GetMapping("/register")
@@ -43,22 +48,25 @@ public class AdminBoardController {
     }
 
     @PostMapping("/modify")
-    public String modify(BoardVO board, RedirectAttributes rttr) {
+    public String modify(BoardVO board, @ModelAttribute("criteria") Criteria criteria, RedirectAttributes rttr) {
         log.info("modify: " + board);
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
+        rttr.addAttribute("pageNum", criteria.getPageNum());
+        rttr.addAttribute("amount", criteria.getAmount());
         return "redirect:/admin/board/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr) {
+    public String remove(@RequestParam("bno") Long bno, @ModelAttribute("criteria") Criteria criteria, RedirectAttributes rttr) {
         log.info("remove....." + bno);
 
         if (service.remove(bno)) {
             rttr.addFlashAttribute("result", "success");
         }
-
+        rttr.addAttribute("pageNum", criteria.getPageNum());
+        rttr.addAttribute("amount", criteria.getAmount());
         return "redirect:/admin/board/list";
     }
 }

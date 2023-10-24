@@ -27,4 +27,22 @@
     <delete id="delete">
         delete from c_board where bno = #{bno}
     </delete>
+
+    <select id="getListWithPaging"
+            resultType="org.choo.domain.BoardVO">
+        <![CDATA[
+		select
+			bno, title, content, writer, regdate, moddate
+		from
+            c_board
+        where bno > 0
+        order by bno desc
+        limit #{limit}, #{amount}
+		]]>
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[ select count(*) from c_board where bno > 0 ]]>
+    </select>
+
 </mapper>

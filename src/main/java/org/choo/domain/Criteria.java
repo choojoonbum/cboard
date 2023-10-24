@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class Criteria {
     private int pageNum;
     private int amount;
+    private int limit;
     private String type;
     private String keyword;
 
@@ -21,6 +22,7 @@ public class Criteria {
     public Criteria(int pageNum, int amount) {
         this.pageNum = pageNum;
         this.amount = amount;
+        this.limit = (pageNum - 1) * amount;
     }
 
     public String[] getTypeArr() {

@@ -22,6 +22,10 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <form:form modelAttribute="board" role="form">
+                            <input type="hidden" name='pageNum' value='${criteria.pageNum}'/>
+                            <input type="hidden" name='amount' value='${criteria.amount}'/>
+                            <input type="hidden" name='keyword' value='${criteria.keyword}'/>
+                            <input type="hidden" name='type' value='${criteria.type}'/>
                             <div class="form-group">
                                 <label>번호</label>
                                 <input class="form-control" readonly="readonly" value='${board.bno}'>
@@ -80,6 +84,11 @@
                 formObj.attr("action", "remove")
             } else if (operation === 'list') {
                 formObj.attr("action", "list").attr("method", "get");
+                var pageNumTag = $('input[name="pageNum"]').clone();
+                var amountTag = $('input[name="amount"]').clone();
+                formObj.empty();
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
             }
             formObj.submit();
         });
