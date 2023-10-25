@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 @Log4j
@@ -21,9 +23,15 @@ public class AdminBoardController {
     @GetMapping("/list")
     public void list(Criteria criteria, Model model) {
         log.info("list");
-        log.info("criteria: " + criteria);
         int total = service.getTotal(criteria);
-        log.info("total: " + total);
+        Map<String, String> type = new LinkedHashMap();
+        String[][] typeArray = {{"T", "제목"},{"C", "내용"},{"W", "작성자"},{"TC", "제목 or 내용"},{"TW", "제목 or 작성자"},{"TCW", "제목 or 내용 or 작성자"}};
+        for (int i = 0; i < typeArray.length; i++) {
+            type.put(typeArray[i][0], typeArray[i][1]);
+        }
+        model.addAttribute("amount", new int[] {10,25,50,100});
+        model.addAttribute("type", type);
+        model.addAttribute("criteria", criteria);
         model.addAttribute("list", service.getList(criteria));
         model.addAttribute("pageMaker", new PageDTO(criteria, total));
     }
@@ -53,9 +61,7 @@ public class AdminBoardController {
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
-        rttr.addAttribute("pageNum", criteria.getPageNum());
-        rttr.addAttribute("amount", criteria.getAmount());
-        return "redirect:/admin/board/list";
+        return "redirect:/admin/board/list" + criteria.getListLink();
     }
 
     @PostMapping("/remove")
@@ -65,8 +71,6 @@ public class AdminBoardController {
         if (service.remove(bno)) {
             rttr.addFlashAttribute("result", "success");
         }
-        rttr.addAttribute("pageNum", criteria.getPageNum());
-        rttr.addAttribute("amount", criteria.getAmount());
-        return "redirect:/admin/board/list";
+        return "redirect:/admin/board/list" + criteria.getListLink();
     }
 }

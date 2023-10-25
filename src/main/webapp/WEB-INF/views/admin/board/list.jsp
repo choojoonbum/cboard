@@ -19,34 +19,36 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form id="actionForm" action="list" method="get">
-                    <input type="hidden" name="pageNum" value="${pageMaker.criteria.pageNum}">
-                    <input type="hidden" name="amount" value="${pageMaker.criteria.amount}">
-                    <input type="hidden" name="type" value="${pageMaker.criteria.type}">
-                    <input type="hidden" name="keyword" value="${pageMaker.criteria.keyword}">
-                </form>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="dataTables_length" id="dataTables-example_length">
-                            <label>Show
-                                <select name="dataTables-example_length" aria-controls="dataTables-example" class="form-control input-sm">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select> entries</label>
+                <form:form modelAttribute="criteria" method="get" action="list">
+                    <form:hidden path="pageNum"/>
+                    <form:hidden path="order"/>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="dataTables_length" id="dataTables-example_length">
+                                <label>목록수
+                                    <form:select path="amount" cssClass="form-control input-sm">
+                                        <form:options items="${amount}" />
+                                    </form:select>
+                                개씩보기</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div id="dataTables-example_filter" class="dataTables_filter dataTables_length">
+                                검색타입:
+                                <form:select path="type" cssClass="form-control input-sm" cssStyle="width:20%;margin-left: 0.5em">
+                                    <option value="">==선택==</option>
+                                    <form:options items="${type}"/>
+                                </form:select>
+                                <label>검색어:<form:input path="keyword" cssClass="form-control input-sm" cssStyle="width: 75%"/></label>
+                                <button class='btn btn-default btn-sm'>Search</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div id="dataTables-example_filter" class="dataTables_filter">
-                            <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="dataTables-example" style="width: 75%"></label>
-                        </div>
-                    </div>
-                </div>
+                </form:form>
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>번호</th>
+                        <th>번호<a class="order" href="bno desc"><i class="fa fa-long-arrow-down"></i></a> <a class="order" href="bno asc"><i class="fa fa-long-arrow-up"></i></a></th>
                         <th>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
@@ -146,10 +148,17 @@
             self.location = "register";
         })
 
-        var actionForm = $("#actionForm");
+        var actionForm = $("#criteria");
         $(".pagination a").on("click", function(e) {
             e.preventDefault();
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        });
+
+        $(".order").on("click", function(e) {
+            e.preventDefault();
+            actionForm.find("input[name='order']").val($(this).attr("href"));
+            actionForm.attr("action", "list");
             actionForm.submit();
         });
 
@@ -160,21 +169,25 @@
             actionForm.submit();
         });
 
-        var searchForm = $("#searchForm");
-        $("#searchForm button").on("click", function(e) {
-            if (!searchForm.find("option:selected").val()) {
+        $("#amount").change(function () {
+            actionForm.submit();
+        });
+
+        $("#criteria button").on("click", function(e) {
+            if (!$("#type option:selected").val()) {
                 alert("검색종류를 선택하세요");
                 return false;
             }
-            if (!searchForm.find("input[name=keyword]").val()) {
+            if (!$("#keyword").val()) {
                 alert("키워드를 입력하세요");
                 return false;
             }
 
-            searchForm.find("input[name='pageNum']").val("1");
+            actionForm.find("input[name='pageNum']").val("1");
             e.preventDefault();
-            searchForm.submit();
+            actionForm.submit();
         });
+
 
     });
 </script>

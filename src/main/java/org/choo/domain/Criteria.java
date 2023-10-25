@@ -3,17 +3,20 @@ package org.choo.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Getter
 @Setter
 @ToString
+@Log4j
 public class Criteria {
     private int pageNum;
     private int amount;
     private int limit;
     private String type;
     private String keyword;
+    private String order;
 
     public Criteria() {
         this(1, 10);
@@ -31,10 +34,11 @@ public class Criteria {
 
     public String getListLink() {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-                .queryParam("pageNum", this.getPageNum())
-                .queryParam("amount", this.getAmount())
-                .queryParam("type", this.getType())
-                .queryParam("keyword", this.getKeyword());
+                .queryParam("pageNum", this.pageNum)
+                .queryParam("amount", this.amount)
+                .queryParam("type", this.type)
+                .queryParam("keyword", this.keyword);
+        log.info(builder.toUriString());
         return builder.toUriString();
     }
 }

@@ -41,5 +41,14 @@ public class BoardMapperTests {
 		list.forEach(log::info);
 	}
 
+	@Test
+	public void testSearch() {
+		Criteria criteria = new Criteria();
+		criteria.setKeyword("99");
+		criteria.setType("TC");
+
+		List<BoardVO> list = mapper.getListWithPaging(criteria);
+		list.forEach(log::info);
+	}
 
 }
