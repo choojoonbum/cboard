@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.choo.mapper.ReplyMapper">
+    <insert id="insert">
+        insert into c_reply (bno, reply, replyer)
+        values (#{bno}, #{reply}, #{replyer})
+    </insert>
+
+    <select id="read" resultType="org.choo.domain.ReplyVO">
+        select * from c_reply where rno = #{rno}
+    </select>
+
+    <delete id="delete">
+        delete from c_reply where rno = #{rno}
+    </delete>
+
+    <update id="update">
+        update c_reply set reply = #{reply}, moddate = current_timestamp() where rno = #{rno}
+    </update>
+
+    <select id="getListWithPaging" resultType="org.choo.domain.ReplyVO">
+        <![CDATA[
+        select * from c_reply where bno = #{bno} and rno > 0 order by rno asc limit #{cri.limit}, #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="getCountByBno" resultType="int">
+        <![CDATA[
+        select count(rno) from c_reply where bno = #{bno}
+        ]]>
+    </select>
+
+</mapper>

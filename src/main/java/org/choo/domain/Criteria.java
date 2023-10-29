@@ -25,7 +25,7 @@ public class Criteria {
     public Criteria(int pageNum, int amount) {
         this.pageNum = pageNum;
         this.amount = amount;
-        this.limit = (pageNum - 1) * amount;
+        setLimit();
     }
 
     public String[] getTypeArr() {
@@ -40,5 +40,9 @@ public class Criteria {
                 .queryParam("keyword", this.keyword);
         log.info(builder.toUriString());
         return builder.toUriString();
+    }
+
+    public void setLimit() {
+        limit = (pageNum - 1) * amount;
     }
 }
