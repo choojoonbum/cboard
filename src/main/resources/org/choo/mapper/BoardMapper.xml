@@ -31,7 +31,7 @@
     <select id="getListWithPaging"
             resultType="org.choo.domain.BoardVO">
 		select
-			bno, title, content, writer, regdate, moddate
+			*
 		from
             c_board
         where
@@ -86,5 +86,9 @@
             </foreach>
         </trim>
     </sql>
+
+    <select id="updateReplyCnt">
+        update c_board set replycnt = replycnt + #{amount} where bno = #{bno}
+    </select>
 
 </mapper>

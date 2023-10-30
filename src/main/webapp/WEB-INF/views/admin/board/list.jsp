@@ -59,7 +59,7 @@
                         <c:forEach items="${list}" var="board">
                         <tr>
                             <td>${board.bno}</td>
-                            <td><a class="move" href="${board.bno}">${board.title}</a></td>
+                            <td><a class="move" href="${board.bno}">${board.title} <b>[ ${board.replyCnt} ]</b></a></td>
                             <td>${board.writer}</td>
                             <td><fdt:formatDateTime value="${board.regDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
                             <td><fdt:formatDateTime value="${board.modDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>

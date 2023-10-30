@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -19,6 +21,7 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = {"org.choo.service", "org.choo.aop"})
 @MapperScan(basePackages = {"org.choo.mapper"})
 @EnableAspectJAutoProxy
+@EnableTransactionManagement
 public class RootConfig {
 
     @Value("${db.driver}")
@@ -55,7 +58,9 @@ public class RootConfig {
         return sqlSessionFactory.getObject();
     }
 
-
-
+    @Bean
+    public DataSourceTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 
 }

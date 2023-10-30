@@ -11,6 +11,7 @@ public class BoardVO {
     private String title;
     private String content;
     private String writer;
+    private int replyCnt;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime regDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
