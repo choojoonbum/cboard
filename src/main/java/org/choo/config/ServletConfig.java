@@ -33,9 +33,9 @@ public class ServletConfig implements WebMvcConfigurer {
     @Bean
     public CommonsMultipartResolver multipartResolver() throws IOException {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(1024 * 1024 * 10);
-        resolver.setMaxUploadSizePerFile(1024 * 1024 * 2);
-        resolver.setMaxInMemorySize(1024 * 1024);
+        resolver.setMaxUploadSize(20971520);
+        resolver.setMaxUploadSizePerFile(41943040);
+        resolver.setMaxInMemorySize(20971520);
         resolver.setUploadTempDir(new FileSystemResource("C:\\Temp\\upload\\tmp"));
         resolver.setDefaultEncoding("UTF-8");
         return resolver;

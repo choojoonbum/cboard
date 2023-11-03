@@ -1,5 +1,6 @@
 package org.choo.service;
 
+import org.choo.domain.BoardAttachVO;
 import org.choo.domain.BoardVO;
 import org.choo.domain.Criteria;
 
@@ -17,4 +18,6 @@ public interface BoardService {
     public List<BoardVO> getList(Criteria criteria);
 
     public int getTotal(Criteria criteria);
+
+    public List<BoardAttachVO> getAttachList(Long bno);
 }
