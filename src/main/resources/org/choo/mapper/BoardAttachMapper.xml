@@ -20,5 +20,9 @@
         delete from c_attach where bno = #{bno}
     </delete>
 
+    <select id="getOldFiles" resultType="org.choo.domain.BoardAttachVO">
+        select * from c_attach where uploadPath = DATE_FORMAT(NOW() - INTERVAL 1 DAY,'%Y\%m\%d')
+    </select>
+
 
 </mapper>

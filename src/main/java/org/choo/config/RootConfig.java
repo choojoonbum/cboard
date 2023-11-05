@@ -13,15 +13,17 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"org.choo.service", "org.choo.aop"})
+@ComponentScan(basePackages = {"org.choo.service", "org.choo.aop", "org.choo.task"})
 @MapperScan(basePackages = {"org.choo.mapper"})
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
+@EnableScheduling
 public class RootConfig {
 
     @Value("${db.driver}")
