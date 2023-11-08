@@ -3,6 +3,8 @@ package org.choo.config;
 import lombok.extern.log4j.Log4j;
 import org.choo.security.CustomAccessDenieHandler;
 import org.choo.security.CustomLoginSuccessHandler;
+import org.choo.security.CustomNoOpPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,10 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 @Log4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -31,10 +38,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        log.info("configure.................");
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
+        log.info("configure jdbc.................");
+        //auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
         //auth.inMemoryAuthentication().withUser("member").password("{noop}member").roles("MEMBER");
-        auth.inMemoryAuthentication().withUser("member").password("$2a$10$Uq40CNNuoak.G3aNHG6xuuFLrpuOVhzc7/9z2nmNVu31b0m8/bHVC").roles("MEMBER");
+        //auth.inMemoryAuthentication().withUser("member").password("$2a$10$Uq40CNNuoak.G3aNHG6xuuFLrpuOVhzc7/9z2nmNVu31b0m8/bHVC").roles("MEMBER");
+        String queryUser = "select userid, userpw, enabled from c_member where userid = ?";
+        String queryDetails = "select userid, auth from c_member_auth where userid = ?";
+        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder()).usersByUsernameQuery(queryUser).authoritiesByUsernameQuery(queryDetails);
+
     }
 
     @Bean
@@ -49,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        //return new CustomNoOpPasswordEncoder();
         return new BCryptPasswordEncoder();
     }
 }
